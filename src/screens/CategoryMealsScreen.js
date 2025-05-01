@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
 import { filterByCategory } from '../api/meals';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import MealCard from '../components/MealCard';
+import BackButton from '../components/BackButton';
 
 const CategoryMealsScreen = ({ route }) => {
     const { category } = route.params;
@@ -31,7 +33,8 @@ const CategoryMealsScreen = ({ route }) => {
     }
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
+            <BackButton />
             <Text style={styles.heading}>{category} Meals</Text>
             <FlatList
                 data={meals}
@@ -40,7 +43,7 @@ const CategoryMealsScreen = ({ route }) => {
                     <MealCard meal={item} />
                 )}
             />
-        </View>
+        </SafeAreaView>
     );
 };
 

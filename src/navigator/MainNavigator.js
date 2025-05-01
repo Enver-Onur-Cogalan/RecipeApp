@@ -10,8 +10,8 @@ const MainNavigator = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen name="Tabs" component={BottomTabs} options={{ headerShown: false }} />
-            <Stack.Screen name="Detail" component={DetailScreen} />
-            <Stack.Screen name="CategoryMeals" component={CategoryMealsScreen} />
+            <Stack.Screen name="Detail" component={DetailScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="CategoryMeals" component={CategoryMealsScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
     );
 };

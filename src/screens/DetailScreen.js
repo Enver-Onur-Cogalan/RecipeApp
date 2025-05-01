@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, Image } from 'react-native';
 import { getMealDetails } from '../api/meals';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import BackButton from '../components/BackButton';
+
 
 const DetailScreen = ({ route }) => {
     const { mealId } = route.params;
     const [meal, setMeal] = useState(null);
     const [loading, setLoading] = useState(true);
+
+
     useEffect(() => {
         const loadMeal = async () => {
             try {
@@ -30,24 +35,27 @@ const DetailScreen = ({ route }) => {
     }
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <Image source={{ uri: meal.strMealThumb }} style={styles.image} />
-            <Text style={styles.title}>{meal.strMeal}</Text>
-            <Text style={styles.section}>Ingredients:</Text>
-            {Array.from({ length: 20 }, (_, i) => {
-                const ingredient = meal[`strIngredient${i + 1}`];
-                const measure = meal[`strMeasure${i + 1}`];
-                return (
-                    ingredient && (
-                        <Text key={i} style={styles.ingredient}>
-                            • {ingredient} - {measure}
-                        </Text>
+        <SafeAreaView>
+            <BackButton />
+            <ScrollView contentContainerStyle={styles.container}>
+                <Image source={{ uri: meal.strMealThumb }} style={styles.image} />
+                <Text style={styles.title}>{meal.strMeal}</Text>
+                <Text style={styles.section}>Ingredients:</Text>
+                {Array.from({ length: 20 }, (_, i) => {
+                    const ingredient = meal[`strIngredient${i + 1}`];
+                    const measure = meal[`strMeasure${i + 1}`];
+                    return (
+                        ingredient && (
+                            <Text key={i} style={styles.ingredient}>
+                                • {ingredient} - {measure}
+                            </Text>
+                        )
                     )
-                )
-            })}
-            <Text style={styles.section}>Instructions:</Text>
-            <Text style={styles.instructions}>{meal.strInstructions}</Text>
-        </ScrollView>
+                })}
+                <Text style={styles.section}>Instructions:</Text>
+                <Text style={styles.instructions}>{meal.strInstructions}</Text>
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 

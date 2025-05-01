@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
 import { fetchCategories } from '../api/meals';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import CategoryCard from '../components/CategoryCard';
 
@@ -44,13 +45,13 @@ const HomeScreen = () => {
 
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <FlatList
                 data={categories}
                 keyExtractor={(item) => item.idCategory}
                 renderItem={({ item }) => <CategoryCard category={item} />}
             />
-        </View>
+        </SafeAreaView>
     )
 }
 
