@@ -43,3 +43,9 @@ export const fetchRandomMeal = async () => {
     const response = await axios.get(`${BASE_URL}/random.php`);
     return response.data.meals[0];
 };
+
+// Get all available areas
+export const getAllAreas = async () => {
+    const response = await axios.get(`${BASE_URL}/list.php?a=list`);
+    return response.data.meals;
+};
