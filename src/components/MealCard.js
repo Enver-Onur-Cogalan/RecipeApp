@@ -1,6 +1,9 @@
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { observer } from 'mobx-react-lite';
+import favoriteStore from '../stores/FavoriteStore';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const MealCard = ({ meal }) => {
     const navigaton = useNavigation();
@@ -14,6 +17,13 @@ const MealCard = ({ meal }) => {
             <View style={styles.textContainer}>
                 <Text style={styles.name}>{meal.strMeal}</Text>
             </View>
+            <TouchableOpacity onPress={() => favoriteStore.toggleFavorite(meal)}>
+                <Icon
+                    name={favoriteStore.isFavorite(meal.idMeal) ? 'heart' : 'heart-outline'}
+                    size={24}
+                    color='#f00'
+                />
+            </TouchableOpacity>
         </TouchableOpacity>
     )
 }
@@ -42,4 +52,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default MealCard;
+export default observer(MealCard);
