@@ -6,6 +6,8 @@ import BackButton from '../components/BackButton';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { observer } from 'mobx-react-lite';
 import favoriteStore from '../stores/FavoriteStore';
+import * as Animatable from 'react-native-animatable';
+import { bounceHeart } from '../utils/animation';
 
 
 const DetailScreen = ({ route }) => {
@@ -42,19 +44,28 @@ const DetailScreen = ({ route }) => {
             <BackButton />
             <ScrollView contentContainerStyle={[styles.container, { paddingBottom: 40 }]}>
                 <Image source={{ uri: meal.strMealThumb }} style={styles.image} />
+
                 <View style={styles.titleRow}>
-                    <Text style={styles.title}>{meal.strMeal}</Text>
+                    <Animatable.Text animation='zoomIn' duration={400} style={styles.title}>
+                        {meal.strMeal}
+                    </Animatable.Text>
                     <TouchableOpacity onPress={() => favoriteStore.toggleFavorite(meal)}>
-                        <Icon
-                            name={favoriteStore.isFavorite(meal.idMeal) ? 'heart' : 'heart-outline'}
-                            size={30}
-                            color='#f00'
-                            style={{ marginLeft: 6, marginBottom: 10 }}
-                        />
+                        <Animatable.View
+                            animation={favoriteStore.isFavorite(meal.idMeal) ? bounceHeart : undefined}
+                            duration={600}
+                            key={favoriteStore.isFavorite(meal.idMeal) ? 'active' : 'inactive'} // rerender
+                        >
+                            <Icon
+                                name={favoriteStore.isFavorite(meal.idMeal) ? 'heart' : 'heart-outline'}
+                                size={28}
+                                color='#f00'
+                                style={{ marginBottom: 10, marginLeft: 6 }}
+                            />
+                        </Animatable.View>
                     </TouchableOpacity>
                 </View>
 
-                <View style={styles.card}>
+                <Animatable.View animation='fadeInUp' duration={600} delay={200} style={styles.card}>
                     <Text style={styles.section}>Ingredients:</Text>
                     {Array.from({ length: 20 }, (_, i) => {
                         const ingredient = meal[`strIngredient${i + 1}`];
@@ -75,17 +86,18 @@ const DetailScreen = ({ route }) => {
                             )
                         );
                     })}
-                </View>
+                </Animatable.View>
 
-                <View style={styles.card}>
+
+                <Animatable.View animation='fadeInUp' duration={600} delay={400} style={styles.card}>
                     <Icon name='book-outline' size={20} color='#00c897' style={{ marginRight: 8 }} />
                     <Text style={styles.section}>Instructions:</Text>
                     <Text style={styles.instructions}>{meal.strInstructions}</Text>
-                </View>
+                </Animatable.View>
             </ScrollView>
         </SafeAreaView>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     center: {
