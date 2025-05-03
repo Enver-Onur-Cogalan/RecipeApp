@@ -18,7 +18,7 @@ const FavoritesScreen = () => {
                         loop
                         style={{ width: 250, height: 250 }}
                     />
-                    <Text style={styles.text}>No favorites added yet</Text>
+                    <Text style={styles.text}>No favorites added yet.</Text>
                     <Icon
                         name='restaurant-outline'
                         size={28}

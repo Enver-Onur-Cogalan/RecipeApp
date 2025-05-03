@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import { fetchCategories, filterByArea, filterByCategory, getAllAreas, searchMeals } from '../api/meals';
+import { fetchCategories, filterByArea, filterByCategory, getAllAreas, searchMeals, fetchRandomMeal } from '../api/meals';
 import MealCard from '../components/MealCard';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import LottieView from 'lottie-react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const SearchScreen = () => {
     const [query, setQuery] = useState('');
@@ -208,6 +209,20 @@ const SearchScreen = () => {
                         />
                     )}
 
+                    <TouchableOpacity
+                        style={styles.randomButton}
+                        onPress={async () => {
+                            const meal = await fetchRandomMeal();
+                            if (meal) {
+                                navigation.navigate('Detail', { mealId: meal.idMeal });
+                            }
+                        }}
+                    >
+                        <Icon name='sparkles' size={20} color='#666' style={{ marginRight: 8 }} />
+                        <Text style={styles.randomButtonText}>Chief's Surprise</Text>
+                        <Icon name='sparkles' size={20} color='#666' style={{ marginLeft: 8 }} />
+                    </TouchableOpacity>
+
 
                     {loading ? (
                         <ActivityIndicator size="large" color="#00c897" />
@@ -303,6 +318,21 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    randomButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#00c897',
+        padding: 12,
+        borderRadius: 8,
+        marginBottom: 12,
+    },
+    randomButtonText: {
+        color: '#fff',
+        fontWeight: '700',
+        fontSize: 18,
+        letterSpacing: 0.75,
+    }
 });
 
 
