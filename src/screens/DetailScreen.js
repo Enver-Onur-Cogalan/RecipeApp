@@ -41,7 +41,9 @@ const DetailScreen = ({ route }) => {
 
     return (
         <SafeAreaView>
-            <BackButton />
+            <View style={{ marginBottom: 40 }}>
+                <BackButton />
+            </View>
             <ScrollView contentContainerStyle={[styles.container, { paddingBottom: 40 }]}>
                 <Image source={{ uri: meal.strMealThumb }} style={styles.image} />
 
@@ -95,7 +97,7 @@ const DetailScreen = ({ route }) => {
                     <Text style={styles.instructions}>{meal.strInstructions}</Text>
                 </Animatable.View>
             </ScrollView>
-        </SafeAreaView>
+        </SafeAreaView >
     );
 };
 

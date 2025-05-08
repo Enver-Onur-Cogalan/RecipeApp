@@ -1,5 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { db } from "../firebase/firebase";
+import { collection, doc, getDocs, setDoc, deleteDoc } from "firebase/firestore";
 
 class FavoriteStore {
     favorites = [];
@@ -11,33 +12,44 @@ class FavoriteStore {
 
     async loadFavorites() {
         try {
-            const data = await AsyncStorage.getItem('favorites');
-            if (data) {
-                runInAction(() => {
-                    this.favorites = JSON.parse(data);
-                });
-            }
+            const snapshot = await getDocs(collection(db, 'favorites'));
+            const favs = snapshot.docs.map((doc) => ({
+                idMeal: doc.id,
+                ...doc.data(),
+            }));
+            runInAction(() => {
+                this.favorites = favs;
+            })
         } catch (e) {
-            console.error('Failed to load favorites', e);
+            console.error('Failed to load favorites from Firestore', e)
         }
     }
 
-    async saveFavorites() {
+    async addFavorite(meal) {
         try {
-            await AsyncStorage.setItem('favorites', JSON.stringify(this.favorites));
+            const ref = doc(db, 'favorites', meal.idMeal);
+            await setDoc(ref, {
+                name: meal.strMeal ?? 'Unnamed',
+                id: meal.idMeal,
+            });
+            runInAction(() => {
+                this.favorites.push(meal);
+            });
         } catch (e) {
-            console.error('Failed to save favorites', e);
+            console.error('Failed to add favorite', e);
         }
     }
 
-    addFavorite(meal) {
-        this.favorites.push(meal);
-        this.saveFavorites();
-    }
-
-    removeFavorite(mealId) {
-        this.favorites = this.favorites.filter((item) => item.idMeal !== mealId);
-        this.saveFavorites();
+    async removeFavorite(mealId) {
+        try {
+            const ref = doc(db, 'favorites', mealId);
+            await deleteDoc(ref);
+            runInAction(() => {
+                this.favorites = this.favorites.filter((item) => item.idMeal !== mealId);
+            });
+        } catch (e) {
+            console.error('Failed to remove favorite', e);
+        }
     }
 
     toggleFavorite(meal) {

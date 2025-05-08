@@ -34,7 +34,9 @@ const CategoryMealsScreen = ({ route }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <BackButton />
+            <View style={{ marginBottom: 40 }}>
+                <BackButton />
+            </View>
             <Text style={styles.heading}>{category} Meals</Text>
             <FlatList
                 data={meals}
